@@ -10,7 +10,8 @@ let age: number = 100;
 let firstName: string = "Kaan";
 let busy: boolean = true;
 */
-
+//Leave comments when work this file
+/*
 const returningUserDisplay = document.querySelector("#returning-user");
 const userNameDisplay = document.querySelector("#user");
 const reviewTotalDisplay = document.querySelector("#reviews");
@@ -65,3 +66,4 @@ populateUser(
   you.isReturning,
   you.userName.firstName + " " + you.userName.lastName
 );
+*/

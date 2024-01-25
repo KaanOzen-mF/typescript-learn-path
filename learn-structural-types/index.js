@@ -13,12 +13,20 @@ var returningUserDisplay = document.querySelector("#returning-user");
 var userNameDisplay = document.querySelector("#user");
 var propertiesDisplay = document.querySelector(".properties");
 var footer = document.querySelector(".footer");
+//enum types
+var LoyaltyUser;
+(function (LoyaltyUser) {
+    LoyaltyUser["GOLD_USER"] = "GOLD_USER";
+    LoyaltyUser["SILVER_USER"] = "SILVER_USER";
+    LoyaltyUser["BRONZE_USER"] = "BRONZE_USER";
+})(LoyaltyUser || (LoyaltyUser = {}));
 //Utils Functions
 function showReviewTotal(value, reviewer, isLoyalty) {
-    var iconDisplay = true ? "⭐" : "";
+    var iconDisplay = LoyaltyUser.GOLD_USER ? "⭐" : "";
     reviewTotalDisplay.innerHTML =
-        "review total " +
-            value.toString() +
+        value.toString() +
+            "Review" +
+            makeMultiple(value) +
             "| last reviewed by " +
             reviewer +
             " " +
@@ -30,35 +38,64 @@ function populateUser(isReturning, userName) {
     }
     userNameDisplay.innerHTML = userName;
 }
-var Permission;
-(function (Permission) {
-    Permission["ADMIN"] = "ADMIN";
-    Permission["READ_ONLY"] = "READ_ONLY";
-})(Permission || (Permission = {}));
+function add(firstValue, secondValue) {
+    return firstValue + secondValue;
+}
+function makeMultiple(value) {
+    if (value > 1 || value == 0) {
+        return "s";
+    }
+    else
+        return "";
+}
 //Reviews
 var reviews = [
     {
         name: "Sheia",
         stars: 5,
-        loyaltyUser: true,
+        loyaltyUser: LoyaltyUser.GOLD_USER,
         date: "01-04-2021",
-        permission: Permission.READ_ONLY,
+        description: null,
     },
     {
         name: "Andrzej",
         stars: 3,
-        loyaltyUser: false,
+        loyaltyUser: LoyaltyUser.BRONZE_USER,
         date: "28-03-2021",
-        permission: Permission.READ_ONLY,
+        description: null,
     },
     {
         name: "Omar",
         stars: 4,
-        loyaltyUser: true,
+        loyaltyUser: LoyaltyUser.SILVER_USER,
         date: "27-03-2021",
-        permission: Permission.ADMIN,
+        description: "Omar's description",
     },
 ];
+/*
+// Reviews with any
+const reviews : any[]= [
+    {
+        name: 'Sheia',
+        stars: 5,
+        loyaltyUser: LoyaltyUser.GOLD_USER,
+        date: '01-04-2021'
+    },
+    {
+        name: 'Andrzej',
+        stars: 3,
+        loyaltyUser: LoyaltyUser.BRONZE_USER,
+        date: '28-03-2021'
+    },
+    {
+        name: 'Omar',
+        stars: 4,
+        loyaltyUser: LoyaltyUser.SILVER_USER,
+        date: '27-03-2021',
+        description: 'Great hosts, location was a bit further than said',
+    },
+]
+*/
 //Object Types
 /******************************************************/
 //User
@@ -68,7 +105,6 @@ var you = {
     age: 26,
     stayedAt: ["florida-home", "oman-flat", "tokyo-bungalow", 23],
 };
-/******************************************************/
 //Array of Properties
 var properties = [
     {
@@ -87,7 +123,7 @@ var properties = [
     {
         image: "./cottage.jpg",
         title: "Polish Cottage",
-        price: 34,
+        price: 30,
         location: {
             firstLine: "no 23",
             city: "Gdansk",
@@ -100,7 +136,7 @@ var properties = [
     {
         image: "./flat.jpg",
         title: "London Flat",
-        price: 23,
+        price: 25,
         location: {
             firstLine: "flat 15",
             city: "London",
@@ -122,10 +158,9 @@ var htmlContent = properties
     .join("");
 propertiesDisplay.innerHTML = htmlContent;
 //Functions
-showReviewTotal(reviews.length, reviews[0].name, reviews[0].loyaltyUser);
+showReviewTotal(reviews.length, reviews[2].name, reviews[2].loyaltyUser);
 populateUser(you.isReturning, you.userName.firstName + " " + you.userName.lastName + " " + you.age);
 var currentLocation = ["Konya", 17.18, 2]; //tuples type
-console.log(currentLocation[1]);
 footer.innerHTML =
     currentLocation[0] +
         " " +

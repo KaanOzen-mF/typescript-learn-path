@@ -17,6 +17,13 @@ const userNameDisplay = document.querySelector("#user");
 const propertiesDisplay = document.querySelector(".properties");
 const footer = document.querySelector(".footer");
 
+//enum types
+enum LoyaltyUser {
+  GOLD_USER = "GOLD_USER",
+  SILVER_USER = "SILVER_USER",
+  BRONZE_USER = "BRONZE_USER",
+}
+
 //Utils Functions
 function showReviewTotal(
   value: number,
@@ -25,8 +32,9 @@ function showReviewTotal(
 ) {
   const iconDisplay = LoyaltyUser.GOLD_USER ? "⭐" : "";
   reviewTotalDisplay!.innerHTML =
-    "review total " +
     value.toString() +
+    "Review" +
+    makeMultiple(value) +
     "| last reviewed by " +
     reviewer +
     " " +
@@ -40,11 +48,17 @@ function populateUser(isReturning: boolean, userName: string) {
   userNameDisplay!.innerHTML = userName;
 }
 
-//enum types
-enum LoyaltyUser {
-  GOLD_USER = "GOLD_USER",
-  SILVER_USER = "SILVER_USER",
-  BRONZE_USER = "BRONZE_USER",
+function add(
+  firstValue: number,
+  secondValue: number
+): number /*return type number*/ {
+  return firstValue + secondValue;
+}
+
+function makeMultiple(value: number): string {
+  if (value > 1 || value == 0) {
+    return "s";
+  } else return "";
 }
 
 //Reviews
@@ -53,26 +67,55 @@ const reviews: {
   stars: number;
   loyaltyUser: LoyaltyUser;
   date: string;
+  description: any; //any
 }[] = [
   {
     name: "Sheia",
     stars: 5,
     loyaltyUser: LoyaltyUser.GOLD_USER,
     date: "01-04-2021",
+    description: null,
   },
   {
     name: "Andrzej",
     stars: 3,
     loyaltyUser: LoyaltyUser.BRONZE_USER,
     date: "28-03-2021",
+    description: null,
   },
   {
     name: "Omar",
     stars: 4,
     loyaltyUser: LoyaltyUser.SILVER_USER,
     date: "27-03-2021",
+    description: "Omar's description",
   },
 ];
+
+/*
+// Reviews with any
+const reviews : any[]= [
+    {
+        name: 'Sheia',
+        stars: 5,
+        loyaltyUser: LoyaltyUser.GOLD_USER,
+        date: '01-04-2021'
+    },
+    {
+        name: 'Andrzej',
+        stars: 3,
+        loyaltyUser: LoyaltyUser.BRONZE_USER,
+        date: '28-03-2021'
+    },
+    {
+        name: 'Omar',
+        stars: 4,
+        loyaltyUser: LoyaltyUser.SILVER_USER,
+        date: '27-03-2021',
+        description: 'Great hosts, location was a bit further than said',
+    },
+]
+*/
 
 //Object Types
 /******************************************************/
@@ -89,17 +132,19 @@ const you: {
   stayedAt: ["florida-home", "oman-flat", "tokyo-bungalow", 23],
 };
 /******************************************************/
-
+//type Alias
+type Price = 45 | 30 | 25;
+type Country = "Colombia" | "Poland" | "United Kingdom";
 //Array of Properties
 const properties: {
   image: string;
   title: string;
-  price: number;
+  price: Price;
   location: {
     firstLine: string;
     city: string;
     code: number;
-    country: string;
+    country: Country;
   };
   contact: [number, string]; //tuple
   isAvailable: boolean;
@@ -120,7 +165,7 @@ const properties: {
   {
     image: "./cottage.jpg",
     title: "Polish Cottage",
-    price: 34,
+    price: 30,
     location: {
       firstLine: "no 23",
       city: "Gdansk",
@@ -133,7 +178,7 @@ const properties: {
   {
     image: "./flat.jpg",
     title: "London Flat",
-    price: 23,
+    price: 25,
     location: {
       firstLine: "flat 15",
       city: "London",
@@ -174,7 +219,7 @@ let htmlContent = properties
 propertiesDisplay!.innerHTML = htmlContent;
 
 //Functions
-showReviewTotal(reviews.length, reviews[0].name, reviews[0].loyaltyUser);
+showReviewTotal(reviews.length, reviews[2].name, reviews[2].loyaltyUser);
 
 populateUser(
   you.isReturning,
@@ -183,7 +228,6 @@ populateUser(
 
 let currentLocation: [string, number, number] = ["Konya", 17.18, 2]; //tuples type
 
-console.log(currentLocation[1]);
 footer!.innerHTML =
   currentLocation[0] +
   " " +
